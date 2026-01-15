@@ -478,7 +478,8 @@ def readTableDB(tablename, key=None, value=None):
 			# note: in case the column (key) has a space, see https://github.com/pandas-dev/pandas/issues/6508. Let's avoid spaces in column headers please!
 			# dilemma: what if the value is a number instead of a string? let's see that happens!
 			# -> solved by typecasting everything as str by default
-		collectDF = collectDF.append(df.copy(), ignore_index=True, sort=False)
+		# pandas 2.x removed DataFrame.append; use concat instead
+		collectDF = pd.concat([collectDF, df.copy()], ignore_index=True, sort=False)
 		del df
 	
 	logmessage('readTableDB: Loaded {}, {} records'.format(tablename,len(collectDF)) )
@@ -1298,7 +1299,8 @@ def replaceChunkyTableDB(xdf, value, tablename='stop_times'):
 			logmessage('Note: {} does not exist yet, so we will likely create it.'.format(chunkFile))
 	
 	# next 3 lines to be done in either case
-	newdf = df.append(xdf, ignore_index=True, sort=False)
+# pandas 2.x removed DataFrame.append; use concat instead
+newdf = pd.concat([df, xdf], ignore_index=True, sort=False)
 	logmessage('{} new entries for id {} added. Now writing to {}.'.format( str( len(xdf) ),value, chunkFile ))
 	newdf.to_hdf(dbFolder+chunkFile, 'df', format='table', mode='w', complevel=1)
 
