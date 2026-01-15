@@ -1299,8 +1299,8 @@ def replaceChunkyTableDB(xdf, value, tablename='stop_times'):
 			logmessage('Note: {} does not exist yet, so we will likely create it.'.format(chunkFile))
 	
 	# next 3 lines to be done in either case
-# pandas 2.x removed DataFrame.append; use concat instead
-newdf = pd.concat([df, xdf], ignore_index=True, sort=False)
+	# pandas 2.x removed DataFrame.append; use concat instead
+	newdf = pd.concat([df, xdf], ignore_index=True, sort=False)
 	logmessage('{} new entries for id {} added. Now writing to {}.'.format( str( len(xdf) ),value, chunkFile ))
 	newdf.to_hdf(dbFolder+chunkFile, 'df', format='table', mode='w', complevel=1)
 
